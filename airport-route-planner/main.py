@@ -1,7 +1,7 @@
 import csv
 import os
 import math
-
+import time
 
 # BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # DATA_DIR = os.path.join(BASE_DIR, "data")
@@ -221,54 +221,102 @@ def main():
     print("Airport Route Planner")
     print("-" * 40)
 
-    source = input("Enter source airport IATA code: ").strip().upper()
-    destination = input("Enter destination airport IATA code: ").strip().upper()
+    source = input(
+        "Enter source airport IATA code: "
+    ).strip().upper()
 
-    # Validate airport codes
+    destination = input(
+        "Enter destination airport IATA code: "
+    ).strip().upper()
+
+    # Validate source airport
     if source not in airports:
-        print(f"Error: Airport code '{source}' does not exist.")
+        print(
+            f"Error: Airport code "
+            f"'{source}' does not exist."
+        )
         return
 
+    # Validate destination airport
     if destination not in airports:
-        print(f"Error: Airport code '{destination}' does not exist.")
+        print(
+            f"Error: Airport code "
+            f"'{destination}' does not exist."
+        )
         return
 
-    print(f"\nFinding routes from {source} to {destination}...")
+    print(
+        f"\nFinding routes from "
+        f"{source} to {destination}..."
+    )
 
-    # -----------------------------------
+    # ===================================
     # BFS - Minimum-stop route
-    # -----------------------------------
+    # ===================================
+
+    start_time = time.perf_counter()
+
     bfs_route = bfs_min_stops(
         graph,
         source,
         destination
     )
 
+    end_time = time.perf_counter()
+
+    bfs_running_time = (
+        end_time - start_time
+    )
+
     print("\nMinimum-stop route:")
 
     if bfs_route:
-        bfs_distance = calculate_route_distance(
-            bfs_route,
-            airports
+        bfs_distance = (
+            calculate_route_distance(
+                bfs_route,
+                airports
+            )
         )
 
-        print("Route:", " -> ".join(bfs_route))
-        print("Number of flights:", len(bfs_route) - 1)
+        print(
+            "Route:",
+            " -> ".join(bfs_route)
+        )
+
+        print(
+            "Number of flights:",
+            len(bfs_route) - 1
+        )
+
         print(
             "Number of intermediate stops:",
             max(0, len(bfs_route) - 2)
         )
+
         print(
             f"Total estimated distance: "
             f"{bfs_distance:.2f} km"
         )
 
+        print(
+            f"Running time: "
+            f"{bfs_running_time:.6f} seconds"
+        )
+
     else:
         print("No route found.")
 
-    # -----------------------------------
-    # Dijkstra - Shortest-distance route
-    # -----------------------------------
+        print(
+            f"Running time: "
+            f"{bfs_running_time:.6f} seconds"
+        )
+
+    # ===================================
+    # Dijkstra - Shortest distance
+    # ===================================
+
+    start_time = time.perf_counter()
+
     dijkstra_route, dijkstra_distance = (
         dijkstra_shortest_distance(
             graph,
@@ -278,6 +326,12 @@ def main():
         )
     )
 
+    end_time = time.perf_counter()
+
+    dijkstra_running_time = (
+        end_time - start_time
+    )
+
     print("\nShortest-distance route:")
 
     if dijkstra_route:
@@ -285,21 +339,34 @@ def main():
             "Route:",
             " -> ".join(dijkstra_route)
         )
+
         print(
             "Number of flights:",
             len(dijkstra_route) - 1
         )
+
         print(
             "Number of intermediate stops:",
             max(0, len(dijkstra_route) - 2)
         )
+
         print(
             f"Total estimated distance: "
             f"{dijkstra_distance:.2f} km"
         )
 
+        print(
+            f"Running time: "
+            f"{dijkstra_running_time:.6f} seconds"
+        )
+
     else:
         print("No route found.")
+
+        print(
+            f"Running time: "
+            f"{dijkstra_running_time:.6f} seconds"
+        )
 
 
 if __name__ == "__main__":
