@@ -3,12 +3,33 @@ import os
 import math
 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# DATA_DIR = os.path.join(BASE_DIR, "data")
 
-AIRPORTS_FILE = os.path.join(DATA_DIR, "airports.dat")
-ROUTES_FILE = os.path.join(DATA_DIR, "routes.dat")
+# AIRPORTS_FILE = os.path.join(DATA_DIR, "airports.dat")
+# ROUTES_FILE = os.path.join(DATA_DIR, "routes.dat")
 
+AIRPORTS_FILE = "airport-route-planner/data/airports.dat"
+ROUTES_FILE = "airport-route-planner/data/routes.dat"
+
+class Queue:
+    def __init__(self):
+        self.items = []
+        self.front = 0
+
+    def enqueue(self, item):
+        self.items.append(item)
+
+    def dequeue(self):
+        if self.is_empty():
+            return None
+
+        item = self.items[self.front]
+        self.front += 1
+        return item
+
+    def is_empty(self):
+        return self.front >= len(self.items)
 
 def load_airports(filename):
     airports = {}
@@ -90,6 +111,28 @@ def get_distance(code1, code2, airports):
         airport2["latitude"],
         airport2["longitude"]
     )
+
+def bfs_min_stops(graph, source, destination):
+    queue = Queue()
+    queue.enqueue((source, [source]))
+
+    visited = set()
+    visited.add(source)
+
+    while not queue.is_empty():
+        current, path = queue.dequeue()
+
+        if current == destination:
+            return path
+
+        for neighbour in graph[current]:
+            if neighbour not in visited:
+                visited.add(neighbour)
+                queue.enqueue(
+                    (neighbour, path + [neighbour])
+                )
+
+    return None
 
 
 def main():
