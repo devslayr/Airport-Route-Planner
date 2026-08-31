@@ -1,5 +1,6 @@
 import csv
 import os
+import math
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -52,9 +53,43 @@ def load_routes(filename, airports):
             if source not in airports or destination not in airports:
                 continue
 
-            graph[source].append(destination)
+            if destination not in graph[source]:
+                graph[source].append(destination)
 
     return graph
+
+def haversine(lat1, lon1, lat2, lon2):
+    EARTH_RADIUS_KM = 6371.0
+
+    lat1 = math.radians(lat1)
+    lon1 = math.radians(lon1)
+    lat2 = math.radians(lat2)
+    lon2 = math.radians(lon2)
+
+    delta_lat = lat2 - lat1
+    delta_lon = lon2 - lon1
+
+    a = (
+        math.sin(delta_lat / 2) ** 2
+        + math.cos(lat1)
+        * math.cos(lat2)
+        * math.sin(delta_lon / 2) ** 2
+    )
+
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    return EARTH_RADIUS_KM * c
+
+def get_distance(code1, code2, airports):
+    airport1 = airports[code1]
+    airport2 = airports[code2]
+
+    return haversine(
+        airport1["latitude"],
+        airport1["longitude"],
+        airport2["latitude"],
+        airport2["longitude"]
+    )
 
 
 def main():
@@ -73,6 +108,11 @@ def main():
     print("\nDirect routes from SGN:")
     if "SGN" in graph:
         print(graph["SGN"][:20])
+
+    # Test Haversine distance
+    if "SGN" in airports and "SIN" in airports:
+        distance = get_distance("SGN", "SIN", airports)
+        print(f"\nEstimated SGN -> SIN distance: {distance:.2f} km")
 
 
 if __name__ == "__main__":
