@@ -22,13 +22,8 @@ def main():
     print("Airport Route Planner")
     print("-" * 40)
 
-    source = input(
-        "Enter source airport IATA code: "
-    ).strip().upper()
-
-    destination = input(
-        "Enter destination airport IATA code: "
-    ).strip().upper()
+    source = input("Enter source airport IATA code: ").upper()
+    destination = input("Enter destination airport IATA code: ").upper()
 
     # Validate source airport
     if source not in airports:
@@ -57,60 +52,24 @@ def main():
 
     start_time = time.perf_counter()
 
-    bfs_route = bfs_min_stops(
-        graph,
-        source,
-        destination
-    )
+    bfs_route = bfs_min_stops(graph, source, destination)
 
     end_time = time.perf_counter()
 
-    bfs_running_time = (
-        end_time - start_time
-    )
+    bfs_running_time = end_time - start_time
 
     print("\nMinimum-stop route:")
 
     if bfs_route:
-        bfs_distance = (
-            calculate_route_distance(
-                bfs_route,
-                airports
-            )
-        )
-
-        print(
-            "Route:",
-            " -> ".join(bfs_route)
-        )
-
-        print(
-            "Number of flights:",
-            len(bfs_route) - 1
-        )
-
-        print(
-            "Number of intermediate stops:",
-            max(0, len(bfs_route) - 2)
-        )
-
-        print(
-            f"Total estimated distance: "
-            f"{bfs_distance:.2f} km"
-        )
-
-        print(
-            f"Running time: "
-            f"{bfs_running_time:.6f} seconds"
-        )
-
+        bfs_distance = calculate_route_distance(bfs_route, airports)
+        print("Route:", " -> ".join(bfs_route))
+        print("Number of flights:", len(bfs_route) - 1)
+        print("Number of intermediate stops:", max(0, len(bfs_route) - 2))
+        print(f"Total estimated distance: {bfs_distance:.2f} km")
+        print(f"Running time: {bfs_running_time:.6f} seconds")
     else:
         print("No route found.")
-
-        print(
-            f"Running time: "
-            f"{bfs_running_time:.6f} seconds"
-        )
+        print(f"Running time: {bfs_running_time:.6f} seconds")
 
     # ===================================
     # Dijkstra - Shortest distance
@@ -118,56 +77,23 @@ def main():
 
     start_time = time.perf_counter()
 
-    dijkstra_route, dijkstra_distance = (
-        dijkstra_shortest_distance(
-            graph,
-            airports,
-            source,
-            destination
-        )
-    )
-
+    dijkstra_route, dijkstra_distance = dijkstra_shortest_distance(graph, airports, source, destination)
+    
     end_time = time.perf_counter()
 
-    dijkstra_running_time = (
-        end_time - start_time
-    )
+    dijkstra_running_time = end_time - start_time
 
     print("\nShortest-distance route:")
 
     if dijkstra_route:
-        print(
-            "Route:",
-            " -> ".join(dijkstra_route)
-        )
-
-        print(
-            "Number of flights:",
-            len(dijkstra_route) - 1
-        )
-
-        print(
-            "Number of intermediate stops:",
-            max(0, len(dijkstra_route) - 2)
-        )
-
-        print(
-            f"Total estimated distance: "
-            f"{dijkstra_distance:.2f} km"
-        )
-
-        print(
-            f"Running time: "
-            f"{dijkstra_running_time:.6f} seconds"
-        )
-
+        print("Route:", " -> ".join(dijkstra_route))
+        print("Number of flights:", len(dijkstra_route) - 1)
+        print("Number of intermediate stops:", max(0, len(dijkstra_route) - 2))
+        print(f"Total estimated distance: {dijkstra_distance:.2f} km")
+        print(f"Running time: {dijkstra_running_time:.6f} seconds")
     else:
         print("No route found.")
-
-        print(
-            f"Running time: "
-            f"{dijkstra_running_time:.6f} seconds"
-        )
+        print(f"Running time: {dijkstra_running_time:.6f} seconds")
 
 
 if __name__ == "__main__":

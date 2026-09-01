@@ -35,12 +35,7 @@ def get_distance(code1, code2, airports):
 
 def calculate_route_distance(route, airports):
     total_distance = 0.0
-
     for i in range(len(route) - 1):
-        total_distance += get_distance(
-            route[i],
-            route[i + 1],
-            airports
-        )
+        total_distance += get_distance(route[i], route[i + 1], airports)
 
     return total_distance
