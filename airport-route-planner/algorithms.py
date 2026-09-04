@@ -13,13 +13,10 @@ def bfs_min_stops(graph, source, destination):
         if current == destination:
             return path
 
-        for neighbour in graph[current]:
-            if neighbour not in visited:
-                visited.add(neighbour)
-                queue.enqueue(
-                    (neighbour, path + [neighbour])
-                )
-
+        for connected_airport in graph[current]:
+            if connected_airport not in visited:
+                visited.add(connected_airport)
+                queue.enqueue((connected_airport, path + [connected_airport]))
     return None
 
 def dijkstra_shortest_distance(graph, airports, source, destination):
@@ -53,16 +50,16 @@ def dijkstra_shortest_distance(graph, airports, source, destination):
             break
 
         unvisited.remove(current)
-        for neighbour in graph[current]:
-            if neighbour not in unvisited:
+        for connected_airport in graph[current]:
+            if connected_airport not in unvisited:
                 continue
 
-            edge_distance = get_distance(current, neighbour, airports)
+            edge_distance = get_distance(current, connected_airport, airports)
             new_distance = distances[current] + edge_distance
             
-            if new_distance < distances[neighbour]:
-                distances[neighbour] = new_distance
-                previous[neighbour] = current
+            if new_distance < distances[connected_airport]:
+                distances[connected_airport] = new_distance
+                previous[connected_airport] = current
 
     # No route found
     if distances[destination] == float("inf"):

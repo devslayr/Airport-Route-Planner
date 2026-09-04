@@ -11,12 +11,7 @@ def haversine(lat1, lon1, lat2, lon2):
     delta_lat = lat2 - lat1
     delta_lon = lon2 - lon1
 
-    a = (
-        math.sin(delta_lat / 2) ** 2
-        + math.cos(lat1)
-        * math.cos(lat2)
-        * math.sin(delta_lon / 2) ** 2
-    )
+    a = math.sin(delta_lat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(delta_lon / 2) ** 2
 
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
